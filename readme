@@ -1,0 +1,25 @@
+1. 启动pmactd
+pmacctd -f pmacct.conf
+2. clickhouse
+clickhouse-client
+32f14d5103c4 :) create database netflow;
+
+CREATE TABLE netflow.nfacct (
+`stamp_updated` DateTime, 
+`as_src` UInt64, 
+`as_dst` UInt64, 
+`peer_ip_src` String, 
+`iface_in` UInt64, 
+`iface_out` UInt64, 
+`ip_src` String, 
+`ip_dst` String, 
+`port_src` UInt64, 
+`port_dst` UInt64, 
+`tcp_flags` UInt8, 
+`ip_proto` String, 
+`tos` UInt8, 
+`packets` UInt64, 
+`bytes` UInt64
+) ENGINE = MergeTree() PARTITION BY toYYYYMMDD(stamp_updated) PRIMARY KEY stamp_updated ORDER BY stamp_updated SETTINGS index_granularity = 8192
+
+3. 配置好nfacct-clickhouse-import与nfacct_drop_patterns

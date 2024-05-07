@@ -1,0 +1,3 @@
+"port_dst": 123,.*"ip_proto": "udp",
+"port_src": 123,.*"ip_proto": "udp",
+"ip_proto": "icmp",

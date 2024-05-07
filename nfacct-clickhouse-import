@@ -1,0 +1,4 @@
+#!/bin/bash
+cat /tmp/nfacctd.json | grep -v -f /home/wangteng/project/testpmacct/nfacct_drop_patterns | clickhouse-client --input_format_skip_unknown_fields=1 --query="INSERT INTO netflow.nfacct FORMAT JSONEachRow"
+#clickhouse-client --query="truncate table netflow.nfacct_dos"
+#cat /tmp/nfacctd.json | clickhouse-client --input_format_skip_unknown_fields=1 --query="INSERT INTO netflow.nfacct_dos FORMAT JSONEachRow"

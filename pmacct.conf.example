@@ -1,0 +1,67 @@
+nfacctd_time_new: true
+nfacctd_account_options: true
+!
+plugins: print[data], print[option_vrf], print[option_if], print[option_sampling]
+!
+pre_tag_filter[data]: 100
+aggregate[data]: peer_src_ip, in_iface, out_iface, tos, vrf_id_ingress, vrf_id_egress
+print_refresh_time[data]: 300
+print_history[data]: 300
+print_history_roundoff[data]: m
+print_output_file_append[data]: true
+print_output_file[data]: /path/to/flow_%s
+print_output[data]: csv
+!
+pre_tag_filter[option_vrf]: 200
+aggregate[option_vrf]: peer_src_ip, vrf_id_ingress, vrf_name
+print_refresh_time[option_vrf]: 300
+print_history[option_vrf]: 300
+print_history_roundoff[option_vrf]: m
+print_output_file_append[option_vrf]: true
+print_output_file[option_vrf]: /path/to/option_vrf_%s
+print_output[option_vrf]: event_csv
+!
+pre_tag_filter[option_if]: 200
+aggregate[option_if]: peer_src_ip, in_iface, int_descr
+print_refresh_time[option_if]: 300
+print_history[option_if]: 300
+print_history_roundoff[option_if]: m 
+print_output_file_append[option_if]: true
+print_output_file[option_if]: /path/to/option_if_%s
+print_output[option_if]: event_csv
+!
+pre_tag_filter[option_sampling]: 200
+aggregate[option_sampling]: peer_src_ip, sampler_id, sampler_interval 
+print_refresh_time[option_sampling]: 300
+print_history[option_sampling]: 300
+print_history_roundoff[option_sampling]: m 
+print_output_file_append[option_sampling]: true
+print_output_file[option_sampling]: /path/to/option_sampling_%s
+print_output[option_sampling]: event_csv
+!
+aggregate_primitives: /path/to/primitives.lst
+pre_tag_map: /path/to/pretag.map
+maps_refresh: true
+
+############
+! ...
+
+Print collected traffic data aggregated by src_host/dst_host over the screen;
+refresh data every 30 seconds and listen on eth0 and eth1, listed in the file
+pointed by pcap_interfaces_map (see 'examples/pcap_interfaces.map.example' for
+more advanced uses of the map):
+
+!
+plugins: print
+print_refresh_time: 30
+aggregate: src_host, dst_host
+pcap_interfaces_map: /path/to/pcap_interfaces.map
+! ...
+
+Then in /path/to/pcap_interfaces.map:
+
+!
+ifindex=100	ifname=eth0
+ifindex=200	ifname=eth1
+! ...
+###########
